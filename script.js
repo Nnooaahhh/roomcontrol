@@ -51,3 +51,20 @@ async function fetchWeather() {
 
 // Fetch weather data once at the start
 fetchWeather();
+
+// Simulate LED control for now
+document.getElementById('led-on').addEventListener('click', () => {
+  console.log('LEDs turned ON');
+});
+
+document.getElementById('led-off').addEventListener('click', () => {
+  console.log('LEDs turned OFF');
+});
+
+document.getElementById('brightness').addEventListener('input', (e) => {
+  console.log(`Brightness set to ${e.target.value}`);
+});
+
+document.getElementById('color').addEventListener('input', (e) => {
+  console.log(`Color set to ${e.target.value}`);
+});
