@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Room Hub</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Control Hub</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <div id="weather">
-      <div id="current-weather">Loading...</div>
-      <div id="tomorrow-weather">Loading...</div>
+    <div id="container">
+        <!-- Weather Section -->
+        <div id="weather-section">
+            <div id="weather"></div>
+            <div id="tomorrow-weather"></div>
+        </div>
+
+        <!-- Time Section -->
+        <div id="time-section">
+            <div id="time"></div>
+        </div>
+
+        <!-- Spotify Login Section -->
+        <div id="spotify-section">
+            <button id="spotify-login" onclick="loginToSpotify()">Login to Spotify</button>
+            <p id="spotify-status">Not connected to Spotify</p>
+        </div>
     </div>
-    <div id="time-section">
-      <div id="weather-above">Weather data</div>
-      <div id="time">Loading time...</div>
-      <div id="date">Loading date...</div>
-    </div>
-    <button id="spotify-login">Login to Spotify</button>
-    <div id="spotify-info">
-      <p id="spotify-status">Not connected to Spotify</p>
-    </div>
-  </div>
-  <script src="script.js"></script>
+
+    <script src="app.js"></script>
 </body>
 </html>
