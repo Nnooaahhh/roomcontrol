@@ -1,49 +1,57 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #1d1d1d;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #2b2d42;
+    color: white;
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 
-.container {
-  text-align: center;
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #2b2d42;
 }
 
-#time {
-  font-size: 6rem;
-  margin: 20px 0;
+#weather-section {
+    margin: 10px;
+    font-size: 18px;
 }
 
-#date {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
+#time-section {
+    margin: 20px;
+    font-size: 50px;
+    font-weight: bold;
 }
 
-#current-weather, #tomorrow-weather {
-  font-size: 1.5rem;
-  margin: 10px 0;
+#spotify-section {
+    margin: 20px;
 }
 
 #spotify-login {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #1db954;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+    background-color: #1db954;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
-#spotify-login:hover {
-  background-color: #1ed760;
+#spotify-status {
+    margin-top: 10px;
+    font-size: 18px;
 }
 
-#spotify-info {
-  margin-top: 10px;
-  font-size: 1.2rem;
+#weather {
+    font-size: 20px;
+}
+
+#tomorrow-weather {
+    font-size: 18px;
+    margin-top: 10px;
 }
