@@ -59,7 +59,7 @@ const city = 'Marlboro'; // The city you want weather data for
 const country = 'US'; // Country code
 
 function getWeatherData() {
-    fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=2`)
+    fetch(`https://api.weatherapi.com/v1/forecast.json?key=${fcfdba90c5034b70a4235310252201}&q=${Marlboro}&days=2`)
         .then(response => response.json())
         .then(data => {
             // Weather data for today and tomorrow
