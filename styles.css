@@ -1,0 +1,38 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.container {
+  text-align: center;
+}
+
+.time-date {
+  font-size: 36px;
+  color: #333;
+}
+
+.weather-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 20px;
+}
+
+.weather {
+  font-size: 18px;
+  color: #333;
+}
+
+.led-controls {
+  margin-top: 30px;
+  font-size: 18px;
+  color: #333;
+}
