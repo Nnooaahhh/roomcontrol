@@ -4,21 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Control Hub</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <!-- Weather and Date -->
-        <div class="weather" id="weather">
-            <p>Loading weather...</p>
-        </div>
-        <div class="time" id="time">
-            Loading time...
+        <div class="header">
+            <div id="weather">Loading weather...</div>
+            <div id="time">Loading time...</div>
         </div>
 
-        <!-- Set Alarm Buttons -->
-        <button id="set-alarm-button">Set Morning Alarm</button>
-        <button id="cancel-alarm-button">Cancel All Alarms</button>
+        <div class="alarm-section">
+            <button id="set-alarm-button">Set Morning Alarm</button>
+            <button id="cancel-alarm-button">Cancel All Alarms</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
