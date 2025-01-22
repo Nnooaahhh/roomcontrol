@@ -7,11 +7,12 @@ async function getWeather() {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const temperature = data.current.temp_c; // Temperature in Celsius
+        const temperatureC = data.current.temp_c; // Temperature in Celsius
+        const temperatureF = (temperatureC * 9/5) + 32; // Convert to Fahrenheit
         const condition = data.current.condition.text; // Weather condition
 
         // Display weather
-        document.getElementById('weather').innerHTML = `${temperature}°C, ${condition}`;
+        document.getElementById('weather').innerHTML = `${Math.round(temperatureF)}°F, ${condition}`;
     } catch (error) {
         console.error('Error fetching weather:', error);
         document.getElementById('weather').innerHTML = 'Weather data not available';
