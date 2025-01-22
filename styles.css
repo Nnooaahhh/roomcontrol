@@ -17,7 +17,7 @@ body {
 
 .weather-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   width: 80%;
   margin-top: 20px;
 }
@@ -30,23 +30,4 @@ body {
 .time-date {
   font-size: 90px;  /* HUGE font size for time */
   color: #fff;
-}
-
-.led-controls {
-  margin-top: 30px;
-  font-size: 18px;
-}
-
-button {
-  margin: 5px;
-  padding: 10px;
-  font-size: 16px;
-}
-
-input[type="range"] {
-  width: 100px;
-}
-
-input[type="color"] {
-  width: 40px;
 }
