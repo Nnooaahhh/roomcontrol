@@ -1,53 +1,75 @@
-// Function to update the time and date
-function updateTimeDate() {
-  const timeElement = document.getElementById('time');
-  const dateElement = document.getElementById('date');
+const clientId = "42682c4f09fe4e34ac485d725f020f3f";
+const clientSecret = "fd6d47d2c597495b87d7bd79fe953717";
+const redirectUri = "https://roomcontrol.vercel.app/callback";
+let accessToken = "";
 
-  const now = new Date();
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  
-  const time = now.toLocaleTimeString('en-US', { hour12: true });
-  const date = now.toLocaleDateString('en-US', options);
-  
-  timeElement.textContent = time;
-  dateElement.textContent = date;
+// Generate Spotify login URL
+document.getElementById("spotify-login").addEventListener("click", () => {
+  const scopes = [
+    "user-read-playback-state",
+    "user-modify-playback-state",
+    "user-read-currently-playing",
+  ];
+  const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&redirect_uri=${encodeURIComponent(
+    redirectUri
+  )}&scope=${encodeURIComponent(scopes.join(" "))}`;
+  window.location.href = authUrl;
+});
+
+// Extract access token from URL after login
+function getAccessTokenFromUrl() {
+  const hash = window.location.hash.substring(1);
+  const params = new URLSearchParams(hash);
+  return params.get("access_token");
 }
 
-// Update every second
-setInterval(updateTimeDate, 1000);
-updateTimeDate(); // Initial call to display time/date immediately
+if (window.location.hash) {
+  accessToken = getAccessTokenFromUrl();
+  console.log("Spotify Access Token:", accessToken);
+}
 
-// Fetch weather data
-async function fetchWeather() {
-  const apiKey = 'fcfdba90c5034b70a4235310252201'; // Your API key
-  const location = 'Marlboro, New Jersey';
-  const currentWeatherElement = document.getElementById('current-weather');
-  const tomorrowWeatherElement = document.getElementById('tomorrow-weather');
-
-  const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=2&aqi=no`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('Weather data not available');
-    }
+// Fetch currently playing song
+async function fetchCurrentlyPlaying() {
+  if (!accessToken) return;
+  const response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (response.ok) {
     const data = await response.json();
-
-    // Current weather
-    const currentTemp = data.current.temp_f;
-    currentWeatherElement.innerHTML = `Now<br>${currentTemp}°F`;
-
-    // Tomorrow's weather
-    const tomorrowDate = new Date();
-    tomorrowDate.setDate(tomorrowDate.getDate() + 1); // Correctly increment to tomorrow's date
-    const lowTemp = data.forecast.forecastday[1].day.mintemp_f;
-    const highTemp = data.forecast.forecastday[1].day.maxtemp_f;
-    tomorrowWeatherElement.innerHTML = `Tomorrow<br>${tomorrowDate.getMonth() + 1}/${tomorrowDate.getDate()}<br>(Low: ${lowTemp}°F / High: ${highTemp}°F)`;
-  } catch (error) {
-    console.error('Error fetching weather data:', error);
-    currentWeatherElement.textContent = 'Weather unavailable';
-    tomorrowWeatherElement.textContent = 'Weather unavailable';
+    const track = data.item;
+    const nowPlayingElement = document.getElementById("spotify-now-playing");
+    nowPlayingElement.innerHTML = `
+      <p><strong>Now Playing:</strong> ${track.name} by ${track.artists.map(artist => artist.name).join(", ")}</p>
+    `;
+  } else {
+    console.error("Error fetching currently playing song");
   }
 }
-// Fetch weather data once at the start
-fetchWeather();
+
+// Control playback
+async function controlPlayback(action) {
+  if (!accessToken) return;
+  const endpoint =
+    action === "play-pause"
+      ? "https://api.spotify.com/v1/me/player/play"
+      : action === "next"
+      ? "https://api.spotify.com/v1/me/player/next"
+      : "https://api.spotify.com/v1/me/player/previous";
+
+  await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
+
+document.getElementById("play-pause").addEventListener("click", () => controlPlayback("play-pause"));
+document.getElementById("next").addEventListener("click", () => controlPlayback("next"));
+document.getElementById("prev").addEventListener("click", () => controlPlayback("prev"));
+
+// Fetch currently playing song every 10 seconds
+setInterval(fetchCurrentlyPlaying, 10000);
+fetchCurrentlyPlaying();
