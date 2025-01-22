@@ -1,37 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Room Hub</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="container">
-    <!-- Weather (Simple) -->
-    <div class="weather-container">
-      <div id="simple-weather" class="weather"></div>
-    </div>
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #2e2e2e; /* Dark background */
+  color: #ddd; /* Light text */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
 
-    <!-- Time & Date -->
-    <div id="time-date" class="time-date">
-      <p id="time"></p>
-      <p id="date"></p>
-    </div>
+.container {
+  text-align: center;
+}
 
-    <!-- LED Controls -->
-    <div id="led-controls" class="led-controls">
-      <h3>LED Controls</h3>
-      <button id="led-on">Turn On</button>
-      <button id="led-off">Turn Off</button>
-      <label for="brightness">Brightness: </label>
-      <input type="range" id="brightness" min="0" max="100" value="50">
-      <br>
-      <label for="color">Color: </label>
-      <input type="color" id="color" value="#ff0000">
-    </div>
-  </div>
+.weather-container {
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+  margin-top: 20px;
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+.weather {
+  font-size: 28px; /* Larger font size for weather */
+  color: #ccc;
+}
+
+.time-date {
+  font-size: 150px;  /* HUGE font size for time */
+  color: #fff;
+}
