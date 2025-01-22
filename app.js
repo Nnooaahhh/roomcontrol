@@ -27,6 +27,7 @@ async function handleSpotifyCallback() {
             // Store the access token for API calls
             if (data.access_token) {
                 localStorage.setItem('spotifyAccessToken', data.access_token);
+                document.getElementById('spotify-status').innerText = 'Connected to Spotify';
                 alert('Spotify authentication successful!');
             } else {
                 alert('Failed to get access token');
@@ -82,8 +83,3 @@ async function updateWeather() {
         weatherElement.innerHTML = 'Weather data not available';
     }
 }
-
-// Call the functions to start updating time and weather
-updateTime();
-updateWeather();
-setInterval(updateTime, 1000); // Update time every second
