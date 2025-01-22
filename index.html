@@ -8,18 +8,20 @@
 </head>
 <body>
   <div class="container">
-    <!-- Spotify Section -->
-    <div id="spotify-container">
-      <button id="spotify-login">Login to Spotify</button>
-      <div id="spotify-now-playing"></div>
-      <div id="spotify-controls">
-        <button id="play-pause">Play/Pause</button>
-        <button id="next">Next</button>
-        <button id="prev">Previous</button>
-      </div>
+    <div id="weather">
+      <div id="current-weather">Loading...</div>
+      <div id="tomorrow-weather">Loading...</div>
+    </div>
+    <div id="time-section">
+      <div id="weather-above">Weather data</div>
+      <div id="time">Loading time...</div>
+      <div id="date">Loading date...</div>
+    </div>
+    <button id="spotify-login">Login to Spotify</button>
+    <div id="spotify-info">
+      <p id="spotify-status">Not connected to Spotify</p>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
