@@ -56,26 +56,26 @@ function updateTime() {
     timeElement.innerHTML = `${time}<br><span style="font-size: 16px;">${date}</span>`;
 }
 
-// Function to fetch weather data
+// Function to fetch weather data from WeatherAPI.com
 async function updateWeather() {
     const weatherElement = document.getElementById('weather');
     const tomorrowWeatherElement = document.getElementById('tomorrow-weather');
 
-    const weatherApiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=40.3656&lon=-74.3915&exclude=minutely,hourly&units=imperial&appid=fcfdba90c5034b70a4235310252201`;
+    const weatherApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=fcfdba90c5034b70a4235310252201&q=Marlboro,New Jersey&days=2`;
 
     try {
         const response = await fetch(weatherApiUrl);
         const data = await response.json();
 
         // Current weather
-        const currentTemp = data.current.temp;
-        const currentWeather = data.current.weather[0].description;
+        const currentTemp = data.current.temp_f;
+        const currentWeather = data.current.condition.text;
         weatherElement.innerHTML = `Now: ${currentTemp}°F<br>${currentWeather}`;
 
         // Tomorrow's weather
-        const tomorrow = data.daily[1]; // Tomorrow's weather data
-        const tempMin = tomorrow.temp.min;
-        const tempMax = tomorrow.temp.max;
+        const tomorrow = data.forecast.forecastday[1]; // Tomorrow's weather data
+        const tempMin = tomorrow.day.mintemp_f;
+        const tempMax = tomorrow.day.maxtemp_f;
         tomorrowWeatherElement.innerHTML = `Tomorrow: ${tempMin}°F/${tempMax}°F`;
     } catch (error) {
         console.error('Error fetching weather data:', error);
