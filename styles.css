@@ -1,46 +1,59 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin: 0;
+    background-color: #f4f4f9;
+    color: #333;
 }
 
 .container {
     text-align: center;
+    padding: 20px;
     background-color: #fff;
-    padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-}
-
-.header {
-    margin-bottom: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #weather {
     font-size: 18px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 #time {
-    font-size: 36px;
+    font-size: 72px;
     font-weight: bold;
-    margin-top: 0;
+    margin-bottom: 20px;
 }
 
-.alarm-section button {
-    margin-top: 15px;
+#alarm-buttons button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
     padding: 10px 20px;
     font-size: 16px;
+    margin: 5px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.alarm-section button:hover {
-    background-color: #007bff;
+#alarm-buttons button:hover {
+    background-color: #45a049;
+}
+
+/* Success Message */
+.success-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
     color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
