@@ -1,6 +1,7 @@
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #f0f0f0;
+  background-color: #2e2e2e; /* Dark background */
+  color: #ddd; /* Light text */
   margin: 0;
   padding: 0;
   display: flex;
@@ -16,7 +17,7 @@ body {
 
 .time-date {
   font-size: 36px;
-  color: #333;
+  color: #fff; /* White text for time/date */
 }
 
 .weather-container {
@@ -28,11 +29,11 @@ body {
 
 .weather {
   font-size: 18px;
-  color: #333;
+  color: #ccc; /* Softer color for weather */
 }
 
 .led-controls {
   margin-top: 30px;
   font-size: 18px;
-  color: #333;
+  color: #ccc; /* Softer color for LED controls */
 }
