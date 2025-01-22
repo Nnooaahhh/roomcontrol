@@ -33,6 +33,17 @@ function setAlarms() {
             alarmTimeouts.push(timeoutId); // Store the timeout ID to be able to clear it
         }
     });
+
+    // Show success notification
+    const successMessage = document.createElement('div');
+    successMessage.classList.add('success-message');
+    successMessage.innerText = "Morning Alarm Set!";
+    document.body.appendChild(successMessage);
+
+    // Remove the success message after 2 seconds
+    setTimeout(() => {
+        successMessage.remove();
+    }, 2000);
 }
 
 // Function to clear all alarms
