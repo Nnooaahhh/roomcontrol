@@ -16,3 +16,33 @@ function updateTimeDate() {
 // Update every second
 setInterval(updateTimeDate, 1000);
 updateTimeDate(); // Initial call to display time/date immediately
+
+// Fetch weather data
+async function fetchWeather() {
+  const apiKey = 'fcfdba90c5034b70a4235310252201'; // Your API key
+  const location = 'Marlboro, New Jersey';
+  const simpleWeatherElement = document.getElementById('simple-weather');
+  const detailedWeatherElement = document.getElementById('detailed-weather');
+
+  const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=no`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Simple weather display (e.g., "72°F, Sunny")
+    simpleWeatherElement.textContent = `${data.current.temp_f}°F, ${data.current.condition.text}`;
+
+    // Detailed weather display
+    detailedWeatherElement.innerHTML = `
+      <strong>Temperature:</strong> ${data.current.temp_f}°F<br>
+      <strong>Condition:</strong> ${data.current.condition.text}<br>
+      <strong>Humidity:</strong> ${data.current.humidity}%<br>
+      <strong>Wind:</strong> ${data.current.wind_mph} mph`;
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+  }
+}
+
+// Fetch weather data once at the start
+fetchWeather();
