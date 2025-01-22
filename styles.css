@@ -27,26 +27,6 @@ body {
     font-weight: bold;
 }
 
-#spotify-section {
-    margin: 20px;
-}
-
-#spotify-login {
-    background-color: #1db954;
-    border: none;
-    padding: 10px 20px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-#spotify-status {
-    margin-top: 10px;
-    font-size: 18px;
-}
-
 #weather {
     font-size: 20px;
 }
