@@ -22,9 +22,8 @@ async function fetchWeather() {
   const apiKey = 'fcfdba90c5034b70a4235310252201'; // Your API key
   const location = 'Marlboro, New Jersey';
   const simpleWeatherElement = document.getElementById('simple-weather');
-  const detailedWeatherElement = document.getElementById('detailed-weather');
 
-  const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=no`;
+  const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=2&aqi=no`;
 
   try {
     const response = await fetch(url);
@@ -34,18 +33,10 @@ async function fetchWeather() {
     const data = await response.json();
 
     // Simple weather display (e.g., "72°F, Sunny")
-    simpleWeatherElement.textContent = `${data.current.temp_f}°F, ${data.current.condition.text}`;
-
-    // Detailed weather display
-    detailedWeatherElement.innerHTML = `
-      <strong>Temperature:</strong> ${data.current.temp_f}°F<br>
-      <strong>Condition:</strong> ${data.current.condition.text}<br>
-      <strong>Humidity:</strong> ${data.current.humidity}%<br>
-      <strong>Wind:</strong> ${data.current.wind_mph} mph`;
+    simpleWeatherElement.textContent = `${data.forecast.forecastday[1].day.avgtemp_f}°F, ${data.forecast.forecastday[1].day.condition.text}`;
   } catch (error) {
     console.error('Error fetching weather data:', error);
     simpleWeatherElement.textContent = 'Weather unavailable';
-    detailedWeatherElement.textContent = 'Weather data could not be loaded.';
   }
 }
 
