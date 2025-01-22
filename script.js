@@ -1,75 +1,69 @@
-const clientId = "42682c4f09fe4e34ac485d725f020f3f";
-const clientSecret = "fd6d47d2c597495b87d7bd79fe953717";
-const redirectUri = "https://roomcontrol.vercel.app/callback";
-let accessToken = "";
-
-// Generate Spotify login URL
-document.getElementById("spotify-login").addEventListener("click", () => {
-  const scopes = [
-    "user-read-playback-state",
-    "user-modify-playback-state",
-    "user-read-currently-playing",
-  ];
-  const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&redirect_uri=${encodeURIComponent(
-    redirectUri
-  )}&scope=${encodeURIComponent(scopes.join(" "))}`;
-  window.location.href = authUrl;
-});
-
-// Extract access token from URL after login
-function getAccessTokenFromUrl() {
-  const hash = window.location.hash.substring(1);
-  const params = new URLSearchParams(hash);
-  return params.get("access_token");
+// Update time and date
+function updateTimeDate() {
+  const timeElement = document.getElementById('time');
+  const dateElement = document.getElementById('date');
+  
+  const now = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  
+  timeElement.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  dateElement.textContent = now.toLocaleDateString('en-US', options);
 }
 
-if (window.location.hash) {
-  accessToken = getAccessTokenFromUrl();
-  console.log("Spotify Access Token:", accessToken);
-}
+setInterval(updateTimeDate, 1000);
+updateTimeDate();
 
-// Fetch currently playing song
-async function fetchCurrentlyPlaying() {
-  if (!accessToken) return;
-  const response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  if (response.ok) {
+// Fetch weather data
+async function fetchWeather() {
+  const apiKey = 'fcfdba90c5034b70a4235310252201';
+  const location = 'Marlboro, New Jersey';
+  const currentWeatherElement = document.getElementById('current-weather');
+  const tomorrowWeatherElement = document.getElementById('tomorrow-weather');
+
+  const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=2&aqi=no`;
+
+  try {
+    const response = await fetch(url);
     const data = await response.json();
-    const track = data.item;
-    const nowPlayingElement = document.getElementById("spotify-now-playing");
-    nowPlayingElement.innerHTML = `
-      <p><strong>Now Playing:</strong> ${track.name} by ${track.artists.map(artist => artist.name).join(", ")}</p>
-    `;
-  } else {
-    console.error("Error fetching currently playing song");
+
+    currentWeatherElement.innerHTML = `Now<br>${data.current.temp_f}°F`;
+    const tomorrow = data.forecast.forecastday[1];
+    tomorrowWeatherElement.innerHTML = `Tomorrow<br>${new Date(tomorrow.date).toLocaleDateString()}<br>Low: ${tomorrow.day.mintemp_f}°F / High: ${tomorrow.day.maxtemp_f}°F`;
+  } catch (error) {
+    console.error('Error fetching weather:', error);
+    currentWeatherElement.textContent = 'Weather unavailable';
+    tomorrowWeatherElement.textContent = 'Weather unavailable';
   }
 }
 
-// Control playback
-async function controlPlayback(action) {
-  if (!accessToken) return;
-  const endpoint =
-    action === "play-pause"
-      ? "https://api.spotify.com/v1/me/player/play"
-      : action === "next"
-      ? "https://api.spotify.com/v1/me/player/next"
-      : "https://api.spotify.com/v1/me/player/previous";
+fetchWeather();
 
-  await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+// Spotify login
+const spotifyLoginButton = document.getElementById('spotify-login');
+const spotifyStatus = document.getElementById('spotify-status');
+
+const clientId = 'your_spotify_client_id'; // Replace with your Spotify Client ID
+const redirectUri = 'https://roomcontrol.vercel.app/callback'; // Replace with your redirect URI
+const scopes = 'user-read-private user-read-email';
+
+spotifyLoginButton.addEventListener('click', () => {
+  const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+  window.location.href = authUrl;
+});
+
+// Handle Spotify token
+function handleSpotifyToken() {
+  const hash = window.location.hash;
+  const token = new URLSearchParams(hash.substring(1)).get('access_token');
+
+  if (token) {
+    spotifyStatus.textContent = 'Connected to Spotify!';
+    console.log('Spotify Access Token:', token);
+    // Store or use the token to fetch user data or control playback
+  } else {
+    spotifyStatus.textContent = 'Not connected to Spotify';
+  }
 }
 
-document.getElementById("play-pause").addEventListener("click", () => controlPlayback("play-pause"));
-document.getElementById("next").addEventListener("click", () => controlPlayback("next"));
-document.getElementById("prev").addEventListener("click", () => controlPlayback("prev"));
-
-// Fetch currently playing song every 10 seconds
-setInterval(fetchCurrentlyPlaying, 10000);
-fetchCurrentlyPlaying();
+// Check for token on load
+handleSpotifyToken();
