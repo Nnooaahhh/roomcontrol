@@ -38,7 +38,8 @@ async function fetchWeather() {
     currentWeatherElement.innerHTML = `Now<br>${currentTemp}°F`;
 
     // Tomorrow's weather
-    const tomorrowDate = new Date(data.forecast.forecastday[1].date);
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1); // Correctly increment to tomorrow's date
     const lowTemp = data.forecast.forecastday[1].day.mintemp_f;
     const highTemp = data.forecast.forecastday[1].day.maxtemp_f;
     tomorrowWeatherElement.innerHTML = `Tomorrow<br>${tomorrowDate.getMonth() + 1}/${tomorrowDate.getDate()}<br>(Low: ${lowTemp}°F / High: ${highTemp}°F)`;
@@ -48,6 +49,5 @@ async function fetchWeather() {
     tomorrowWeatherElement.textContent = 'Weather unavailable';
   }
 }
-
 // Fetch weather data once at the start
 fetchWeather();
