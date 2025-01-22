@@ -15,21 +15,21 @@ body {
   text-align: center;
 }
 
-.time-date {
-  font-size: 72px;  /* Increase the font size for the time */
-  color: #fff;
-}
-
 .weather-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 80%;
   margin-top: 20px;
 }
 
 .weather {
-  font-size: 18px;
+  font-size: 28px; /* Larger font size for weather */
   color: #ccc;
+}
+
+.time-date {
+  font-size: 150px;  /* HUGE font size for time */
+  color: #fff;
 }
 
 .led-controls {
