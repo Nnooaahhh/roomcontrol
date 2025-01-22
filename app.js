@@ -2,7 +2,8 @@ const clientId = '42682c4f09fe4e34ac485d725f020f3f'; // Your Spotify Client ID
 const redirectUri = 'https://roomcontrol.vercel.app/callback'; // Your Vercel site callback URL
 const scopes = 'user-read-playback-state user-modify-playback-state';
 
-const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}`;
+const authUrl = `https://accounts.spotify.com/authorize?client_id=${42682c4f09fe4e34ac485d725f020f3f}&response_type=code&redirect_uri=${encodeURIComponent(https://roomcontrol.vercel.app/callback
+)}&scope=${encodeURIComponent(scopes)}`;
 
 // Redirect user to Spotify authentication
 function loginToSpotify() {
