@@ -28,6 +28,9 @@ async function fetchWeather() {
 
   try {
     const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Weather data not available');
+    }
     const data = await response.json();
 
     // Simple weather display (e.g., "72°F, Sunny")
@@ -41,6 +44,8 @@ async function fetchWeather() {
       <strong>Wind:</strong> ${data.current.wind_mph} mph`;
   } catch (error) {
     console.error('Error fetching weather data:', error);
+    simpleWeatherElement.textContent = 'Weather unavailable';
+    detailedWeatherElement.textContent = 'Weather data could not be loaded.';
   }
 }
 
