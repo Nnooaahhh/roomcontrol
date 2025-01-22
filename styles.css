@@ -16,8 +16,8 @@ body {
 }
 
 .time-date {
-  font-size: 36px;
-  color: #fff; /* White text for time/date */
+  font-size: 72px;  /* Increase the font size for the time */
+  color: #fff;
 }
 
 .weather-container {
@@ -29,11 +29,24 @@ body {
 
 .weather {
   font-size: 18px;
-  color: #ccc; /* Softer color for weather */
+  color: #ccc;
 }
 
 .led-controls {
   margin-top: 30px;
   font-size: 18px;
-  color: #ccc; /* Softer color for LED controls */
+}
+
+button {
+  margin: 5px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+input[type="range"] {
+  width: 100px;
+}
+
+input[type="color"] {
+  width: 40px;
 }
