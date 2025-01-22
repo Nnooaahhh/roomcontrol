@@ -4,30 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Control Hub</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="container">
-        <!-- Weather Section -->
-        <div id="weather-section">
-            <div id="weather"></div>
-            <div id="tomorrow-weather"></div>
+    <div class="container">
+        <!-- Weather and Date -->
+        <div class="weather" id="weather">
+            <p>Loading weather...</p>
+        </div>
+        <div class="time" id="time">
+            Loading time...
         </div>
 
-        <!-- Time Section -->
-        <div id="time-section">
-            <div id="time"></div>
-        </div>
+        <!-- Set Alarm Buttons -->
+        <button id="set-alarm-button">Set Morning Alarm</button>
+        <button id="cancel-alarm-button">Cancel All Alarms</button>
     </div>
 
-    <script src="app.js"></script>
-    <script>
-        // Run the update functions after the page has fully loaded
-        window.onload = function() {
-            updateTime();
-            updateWeather();
-            setInterval(updateTime, 1000); // Update time every second
-        };
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
