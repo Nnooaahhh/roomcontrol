@@ -42,7 +42,7 @@ fetchWeather();
 const spotifyLoginButton = document.getElementById('spotify-login');
 const spotifyStatus = document.getElementById('spotify-status');
 
-const clientId = 'your_spotify_client_id'; // Replace with your Spotify Client ID
+const clientId = '42682c4f09fe4e34ac485d725f020f3f';
 const redirectUri = 'https://roomcontrol.vercel.app/callback'; // Replace with your redirect URI
 const scopes = 'user-read-private user-read-email';
 
