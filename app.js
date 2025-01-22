@@ -42,13 +42,35 @@ function clearAlarms() {
     alert('All alarms have been canceled.');
 }
 
-// Add event listener to the "Set Morning Alarm" button
-document.getElementById('set-alarm-button').addEventListener('click', setAlarms);
+// Fetching weather data
+const apiKey = 'fcfdba90c5034b70a4235310252201'; // Your WeatherAPI key
+const city = 'Marlboro'; // The city you want weather data for
+const country = 'US'; // Country code
 
-// Add event listener to the "Cancel Alarms" button
-document.getElementById('cancel-alarm-button').addEventListener('click', clearAlarms);
+function getWeatherData() {
+    fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=2`)
+        .then(response => response.json())
+        .then(data => {
+            // Weather data for today and tomorrow
+            const currentTemp = data.current.temp_c;
+            const tomorrowLow = data.forecast.forecastday[1].day.mintemp_c;
+            const tomorrowHigh = data.forecast.forecastday[1].day.maxtemp_c;
 
-// Function to display the time and weather
+            // Display weather data
+            const weatherElement = document.getElementById('weather');
+            weatherElement.innerHTML = `
+                <strong>Now:</strong> ${currentTemp}°C <br>
+                <strong>Tomorrow:</strong> ${tomorrowLow}°C / ${tomorrowHigh}°C
+            `;
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+            const weatherElement = document.getElementById('weather');
+            weatherElement.innerHTML = '<strong>Weather data not available.</strong>';
+        });
+}
+
+// Function to display the time
 function updateTimeAndWeather() {
     // Time
     const timeElement = document.getElementById('time');
@@ -58,13 +80,13 @@ function updateTimeAndWeather() {
     const seconds = now.getSeconds().toString().padStart(2, '0');
     timeElement.innerText = `${hours}:${minutes}:${seconds}`;
 
-    // Weather (dummy example, can be replaced with real data from an API)
-    const weatherElement = document.getElementById('weather');
-    weatherElement.innerHTML = `
-        <strong>Now:</strong> 20°C <br>
-        <strong>Tomorrow:</strong> 10°C / 30°C
-    `;
+    // Update weather data
+    getWeatherData();
 }
 
 // Update the time and weather every second
 setInterval(updateTimeAndWeather, 1000);
+
+// Set event listeners
+document.getElementById('set-alarm-button').addEventListener('click', setAlarms);
+document.getElementById('cancel-alarm-button').addEventListener('click', clearAlarms);
