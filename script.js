@@ -1,120 +1,83 @@
-// Weather and Time API Integration
-const weatherAPIKey = "fcfdba90c5034b70a4235310252201";
-const weatherURL = `https://api.weatherapi.com/v1/current.json?key=${weatherAPIKey}&q=auto:ip`;
+// Weather API key
+const weatherApiKey = "fcfdba90c5034b70a4235310252201";
 
-async function fetchWeather() {
-  try {
-    const response = await fetch(weatherURL);
-    const data = await response.json();
-    const { temp_f, condition } = data.current;
-    document.getElementById("current-weather").textContent = `${temp_f}°F - ${condition.text}`;
-  } catch (error) {
-    console.error("Weather fetch error:", error);
-    document.getElementById("current-weather").textContent = "Unable to load weather.";
-  }
-}
-
+// Update Time
 function updateTime() {
   const now = new Date();
-  const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const timeString = now.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit', // Include seconds
+  });
   document.getElementById("current-time").textContent = timeString;
 }
 
-setInterval(updateTime, 1000);
+setInterval(updateTime, 1000); // Update every second
+
+// Fetch and Display Weather
+async function fetchWeather() {
+  try {
+    const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${weatherApiKey}&q=Marlboro,New Jersey&aqi=no`);
+    const data = await response.json();
+    const temp = data.current.temp_f;
+    document.getElementById("simple-weather").textContent = `Current Temp: ${temp}°F`;
+  } catch (error) {
+    document.getElementById("simple-weather").textContent = "Weather data not available";
+  }
+}
+
 fetchWeather();
 
 // Alarm Functionality
-const alarmForm = document.getElementById("alarm-form");
-const alarmList = document.getElementById("active-alarms");
-const successMessage = document.getElementById("alarm-success-message");
-const alarmSound = document.getElementById("alarm-sound");
-const alarms = [];
+let alarmTimes = [];
+let alarmInterval;
 
-// Handle alarm submission
-alarmForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+function setAlarm() {
+  const alarms = [
+    { time: '07:25:00', message: 'Alarm 1: Good morning Mr. Alter' },
+    { time: '07:30:00', message: 'Alarm 2: You have 9 minutes of sleep remaining!' },
+    { time: '07:39:00', message: 'Alarm 3: It\'s time to wake up Mr. Alter' }
+  ];
 
-  const time = document.getElementById("alarm-time").value;
-  const label = document.getElementById("alarm-label").value;
+  alarmTimes = alarms.map(alarm => alarm.time);
 
-  if (time && label) {
-    console.log(`Setting alarm for ${time} with label "${label}"`);
-
-    const alarm = { time, label, id: Date.now() };
-    alarms.push(alarm);
-    displayAlarms();
-    scheduleAlarm(alarm);
-    showSuccessMessage();
-  } else {
-    console.error("Invalid time or label");
-  }
-});
-
-// Display alarms
-function displayAlarms() {
-  alarmList.innerHTML = "";
-  alarms.forEach((alarm, index) => {
+  const alarmList = document.getElementById("upcoming-alarms");
+  alarmList.innerHTML = '';
+  alarms.forEach(alarm => {
     const li = document.createElement("li");
-    li.textContent = `${alarm.time} - ${alarm.label}`;
-
-    const offButton = document.createElement("button");
-    offButton.textContent = "Turn Off";
-    offButton.onclick = () => {
-      alarms.splice(index, 1);
-      console.log(`Alarm for ${alarm.time} turned off`);
-      displayAlarms();
-    };
-
-    li.appendChild(offButton);
+    li.textContent = `${alarm.time} - ${alarm.message}`;
     alarmList.appendChild(li);
   });
-}
 
-// Schedule an alarm
-function scheduleAlarm(alarm) {
-  const now = new Date();
-  const [hours, minutes] = alarm.time.split(":").map(Number);
-  const alarmTime = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    hours,
-    minutes,
-    0
-  );
-  const delay = alarmTime - now;
+  document.getElementById("success-message").textContent = "Alarm set successfully!";
+  setTimeout(() => {
+    document.getElementById("success-message").textContent = "";
+  }, 3000);
 
-  if (delay > 0) {
-    console.log(`Alarm set for ${alarm.time}, triggering in ${delay}ms`);
-    setTimeout(() => {
-      playAlarm(alarm.label);
-    }, delay);
-  } else {
-    console.warn(`Invalid alarm time: ${alarm.time} is in the past`);
+  if (!alarmInterval) {
+    alarmInterval = setInterval(checkAlarms, 1000);
   }
 }
 
-// Play alarm sound and show notification
-function playAlarm(label) {
-  alarmSound.play();
-  const notification = document.createElement("p");
-  notification.textContent = `Alarm: ${label}`;
-  notification.style.color = "red";
-  notification.style.fontWeight = "bold";
-  notification.style.textAlign = "center";
-
-  const alarmSection = document.getElementById("alarm-section");
-  alarmSection.appendChild(notification);
-
-  setTimeout(() => {
-    alarmSection.removeChild(notification);
-  }, 5000); // Remove the notification after 5 seconds
+function checkAlarms() {
+  const now = new Date().toTimeString().split(" ")[0];
+  if (alarmTimes.includes(now)) {
+    playAlarm();
+  }
 }
 
-// Show success message
-function showSuccessMessage() {
-  successMessage.style.display = "block";
-  setTimeout(() => {
-    successMessage.style.display = "none";
-  }, 3000);
+function playAlarm() {
+  const audio = new Audio("alarm-sound.mp3");
+  audio.play();
 }
+
+function clearAlarms() {
+  alarmTimes = [];
+  clearInterval(alarmInterval);
+  alarmInterval = null;
+  document.getElementById("upcoming-alarms").innerHTML = '';
+}
+
+// Event Listeners
+document.getElementById("set-alarm").addEventListener("click", setAlarm);
+document.getElementById("clear-alarms").addEventListener("click", clearAlarms);
