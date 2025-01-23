@@ -1,42 +1,29 @@
-// Function to fetch weather data
-async function getWeather() {
-    const apiKey = 'fcfdba90c5034b70a4235310252201'; // Your WeatherAPI key
-    const city = 'Marlboro'; // You can change the city here
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
+// Weather and Time API Integration
+const weatherAPIKey = "fcfdba90c5034b70a4235310252201";
+const weatherURL = `https://api.weatherapi.com/v1/current.json?key=${weatherAPIKey}&q=auto:ip`;
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const temperatureC = data.current.temp_c; // Temperature in Celsius
-        const temperatureF = (temperatureC * 9/5) + 32; // Convert to Fahrenheit
-        const condition = data.current.condition.text; // Weather condition
-
-        // Display weather
-        document.getElementById('weather').innerHTML = `${Math.round(temperatureF)}°F, ${condition}`;
-    } catch (error) {
-        console.error('Error fetching weather:', error);
-        document.getElementById('weather').innerHTML = 'Weather data not available';
-    }
+async function fetchWeather() {
+  try {
+    const response = await fetch(weatherURL);
+    const data = await response.json();
+    const { temp_f, condition } = data.current;
+    document.getElementById("current-weather").textContent = `${temp_f}°F - ${condition.text}`;
+  } catch (error) {
+    console.error("Weather fetch error:", error);
+    document.getElementById("current-weather").textContent = "Unable to load weather.";
+  }
 }
 
-// Function to update the current time
 function updateTime() {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
-    const formattedTime = `${hours % 12 || 12}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} ${hours >= 12 ? 'PM' : 'AM'}`;
-    const formattedDate = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-    document.getElementById('time').innerHTML = `${formattedTime}<br>${formattedDate}`;
+  const now = new Date();
+  const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  document.getElementById("current-time").textContent = timeString;
 }
 
-// Initialize and update time every second
 setInterval(updateTime, 1000);
+fetchWeather();
 
-// Get weather data on page load
-getWeather();
-
+// Alarm Functionality
 const alarmForm = document.getElementById("alarm-form");
 const alarmList = document.getElementById("active-alarms");
 const successMessage = document.getElementById("alarm-success-message");
@@ -51,11 +38,15 @@ alarmForm.addEventListener("submit", (event) => {
   const label = document.getElementById("alarm-label").value;
 
   if (time && label) {
+    console.log(`Setting alarm for ${time} with label "${label}"`);
+
     const alarm = { time, label, id: Date.now() };
     alarms.push(alarm);
     displayAlarms();
     scheduleAlarm(alarm);
     showSuccessMessage();
+  } else {
+    console.error("Invalid time or label");
   }
 });
 
@@ -70,6 +61,7 @@ function displayAlarms() {
     offButton.textContent = "Turn Off";
     offButton.onclick = () => {
       alarms.splice(index, 1);
+      console.log(`Alarm for ${alarm.time} turned off`);
       displayAlarms();
     };
 
@@ -81,14 +73,25 @@ function displayAlarms() {
 // Schedule an alarm
 function scheduleAlarm(alarm) {
   const now = new Date();
-  const alarmTime = new Date(`${now.toDateString()} ${alarm.time}`);
+  const [hours, minutes] = alarm.time.split(":").map(Number);
+  const alarmTime = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    hours,
+    minutes,
+    0
+  );
   const delay = alarmTime - now;
 
   if (delay > 0) {
+    console.log(`Alarm set for ${alarm.time}, triggering in ${delay}ms`);
     setTimeout(() => {
       alarmSound.play();
       alert(`Alarm: ${alarm.label}`);
     }, delay);
+  } else {
+    console.warn(`Invalid alarm time: ${alarm.time} is in the past`);
   }
 }
 
