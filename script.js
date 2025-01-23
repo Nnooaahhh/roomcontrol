@@ -1,84 +1,91 @@
-// Weather API key
-const weatherApiKey = "fcfdba90c5034b70a4235310252201";
+// Light/Dark Mode Toggle
+const modeToggleButton = document.getElementById('mode-toggle');
 
-// Update Time
+// Check if user has a saved theme preference
+const currentMode = localStorage.getItem('theme') || 'light';
+document.body.classList.add(`${currentMode}-mode`);
+
+// Update the button text
+if (currentMode === 'light') {
+  modeToggleButton.innerText = 'Switch to Dark Mode';
+} else {
+  modeToggleButton.innerText = 'Switch to Light Mode';
+}
+
+// Toggle between light and dark modes
+modeToggleButton.addEventListener('click', () => {
+  const newMode = currentMode === 'light' ? 'dark' : 'light';
+  document.body.classList.remove(`${currentMode}-mode`);
+  document.body.classList.add(`${newMode}-mode`);
+  localStorage.setItem('theme', newMode); // Save preference
+
+  // Update the button text
+  modeToggleButton.innerText = newMode === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+});
+
+// Weather API Key and URL
+const weatherAPIKey = 'fcfdba90c5034b70a4235310252201';  // Your API Key
+const weatherURL = `https://api.weatherapi.com/v1/forecast.json?key=${weatherAPIKey}&q=Marlboro&days=2&aqi=no&alerts=no`;
+
+// Fetch and display weather
+async function getWeather() {
+  try {
+    const response = await fetch(weatherURL);
+    const data = await response.json();
+
+    const currentTemp = data.current.temp_f;
+    const tomorrowLow = data.forecast.forecastday[1].day.mintemp_f;
+    const tomorrowHigh = data.forecast.forecastday[1].day.maxtemp_f;
+
+    document.getElementById('current-weather').innerHTML = `
+      <p>Current Temp: ${currentTemp}°F</p>
+    `;
+    document.getElementById('forecast').innerHTML = `
+      <p>Tomorrow's Forecast: ${tomorrowLow}°F / ${tomorrowHigh}°F</p>
+    `;
+  } catch (error) {
+    document.getElementById('current-weather').innerHTML = `<p>Error loading weather</p>`;
+  }
+}
+
+getWeather();
+
+// Display current time and date
 function updateTime() {
   const now = new Date();
-  const timeString = now.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit', // Include seconds
-  });
-  document.getElementById("current-time").textContent = timeString;
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+  const date = now.toLocaleDateString();
+
+  document.getElementById('time').innerHTML = `${hours}:${minutes}:${seconds}`;
 }
 
-setInterval(updateTime, 1000); // Update every second
+setInterval(updateTime, 1000);
 
-// Fetch and Display Weather
-async function fetchWeather() {
-  try {
-    const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${weatherApiKey}&q=Marlboro,New Jersey&aqi=no`);
-    const data = await response.json();
-    const temp = data.current.temp_f;
-    document.getElementById("simple-weather").textContent = `Current Temp: ${temp}°F`;
-  } catch (error) {
-    document.getElementById("simple-weather").textContent = "Weather data not available";
-  }
-}
+// Alarm functionality
+const alarmTimes = [
+  { time: '07:25:00', message: 'Alarm 1: Goodmorning Mr. Alter' },
+  { time: '07:30:00', message: 'Alarm 2: You have 9 minutes of sleep remaining!' },
+  { time: '07:39:00', message: 'Alarm 3: It\'s time to wake up Mr Alter' },
+];
 
-fetchWeather();
-
-// Alarm Functionality
-let alarmTimes = [];
-let alarmInterval;
+let alarmsSet = [];
 
 function setAlarm() {
-  const alarms = [
-    { time: '21:46:00', message: 'Alarm 1: Good morning Mr. Alter' },
-    { time: '07:25:00', message: 'Alarm 1: Good morning Mr. Alter' },
-    { time: '07:30:00', message: 'Alarm 2: You have 9 minutes of sleep remaining!' },
-    { time: '07:39:00', message: 'Alarm 3: It\'s time to wake up Mr. Alter' }
-  ];
+  const alarmMessageElement = document.getElementById('alarm-message');
+  alarmMessageElement.innerHTML = 'Alarm set successfully for 7:25 AM, 7:30 AM, and 7:39 AM.';
+  alarmsSet = alarmTimes.map(alarm => {
+    const alarmTime = new Date();
+    const [hours, minutes, seconds] = alarm.time.split(':');
+    alarmTime.setHours(hours, minutes, seconds);
 
-  alarmTimes = alarms.map(alarm => alarm.time);
-
-  const alarmList = document.getElementById("upcoming-alarms");
-  alarmList.innerHTML = '';
-  alarms.forEach(alarm => {
-    const li = document.createElement("li");
-    li.textContent = `${alarm.time} - ${alarm.message}`;
-    alarmList.appendChild(li);
+    return setTimeout(() => {
+      alert(alarm.message);
+      const audio = new Audio('alarm-sound.mp3');
+      audio.play();
+    }, alarmTime.getTime() - Date.now());
   });
-
-  document.getElementById("success-message").textContent = "Alarm set successfully!";
-  setTimeout(() => {
-    document.getElementById("success-message").textContent = "";
-  }, 3000);
-
-  if (!alarmInterval) {
-    alarmInterval = setInterval(checkAlarms, 1000);
-  }
 }
 
-function checkAlarms() {
-  const now = new Date().toTimeString().split(" ")[0];
-  if (alarmTimes.includes(now)) {
-    playAlarm();
-  }
-}
-
-function playAlarm() {
-  const audio = new Audio("alarm-sound.mp3");
-  audio.play();
-}
-
-function clearAlarms() {
-  alarmTimes = [];
-  clearInterval(alarmInterval);
-  alarmInterval = null;
-  document.getElementById("upcoming-alarms").innerHTML = '';
-}
-
-// Event Listeners
-document.getElementById("set-alarm").addEventListener("click", setAlarm);
-document.getElementById("clear-alarms").addEventListener("click", clearAlarms);
+document.getElementById('set-alarm-button').addEventListener('click', setAlarm);
