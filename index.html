@@ -16,5 +16,20 @@
     </div>
 
     <script src="script.js"></script>
+    <div id="alarm-section">
+  <h3>Set Custom Alarm</h3>
+  <form id="alarm-form">
+    <label for="alarm-time">Time:</label>
+    <input type="time" id="alarm-time" required />
+    <label for="alarm-label">Label:</label>
+    <input type="text" id="alarm-label" placeholder="Alarm Label" required />
+    <button type="submit">Set Alarm</button>
+  </form>
+  <p id="alarm-success-message" style="display: none; color: green;">Alarm successfully set!</p>
+  <h4>Upcoming Alarms</h4>
+  <ul id="active-alarms"></ul>
+</div>
+<audio id="alarm-sound" src="alarm-sound.mp3" preload="auto"></audio>
+
 </body>
 </html>
