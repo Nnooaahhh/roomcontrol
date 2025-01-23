@@ -34,6 +34,7 @@ let alarmInterval;
 
 function setAlarm() {
   const alarms = [
+    { time: '21:46:00', message: 'Alarm 1: Good morning Mr. Alter' },
     { time: '07:25:00', message: 'Alarm 1: Good morning Mr. Alter' },
     { time: '07:30:00', message: 'Alarm 2: You have 9 minutes of sleep remaining!' },
     { time: '07:39:00', message: 'Alarm 3: It\'s time to wake up Mr. Alter' }
