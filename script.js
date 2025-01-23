@@ -25,7 +25,7 @@ modeToggleButton.addEventListener('click', () => {
 
 // Weather API Key and URL
 const weatherAPIKey = 'fcfdba90c5034b70a4235310252201';  // Your API Key
-const weatherURL = `https://api.weatherapi.com/v1/forecast.json?key=${weatherAPIKey}&q=Marlboro&days=2&aqi=no&alerts=no`;
+const weatherURL = `https://api.weatherapi.com/v1/current.json?key=${weatherAPIKey}&q=Marlboro&aqi=no`;
 
 // Fetch and display weather
 async function getWeather() {
@@ -34,14 +34,9 @@ async function getWeather() {
     const data = await response.json();
 
     const currentTemp = data.current.temp_f;
-    const tomorrowLow = data.forecast.forecastday[1].day.mintemp_f;
-    const tomorrowHigh = data.forecast.forecastday[1].day.maxtemp_f;
 
     document.getElementById('current-weather').innerHTML = `
       <p>Current Temp: ${currentTemp}°F</p>
-    `;
-    document.getElementById('forecast').innerHTML = `
-      <p>Tomorrow's Forecast: ${tomorrowLow}°F / ${tomorrowHigh}°F</p>
     `;
   } catch (error) {
     document.getElementById('current-weather').innerHTML = `<p>Error loading weather</p>`;
@@ -81,7 +76,6 @@ function setAlarm() {
     alarmTime.setHours(hours, minutes, seconds);
 
     return setTimeout(() => {
-      alert(alarm.message);
       const audio = new Audio('alarm-sound.mp3');
       audio.play();
     }, alarmTime.getTime() - Date.now());
