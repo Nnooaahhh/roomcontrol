@@ -70,16 +70,22 @@ let alarmsSet = [];
 function setAlarm() {
   const alarmMessageElement = document.getElementById('alarm-message');
   alarmMessageElement.innerHTML = 'Alarm set successfully for 7:25 AM, 7:30 AM, and 7:39 AM.';
+
   alarmsSet = alarmTimes.map(alarm => {
     const alarmTime = new Date();
     const [hours, minutes, seconds] = alarm.time.split(':');
     alarmTime.setHours(hours, minutes, seconds);
 
-    return setTimeout(() => {
-      const audio = new Audio('alarm-sound.mp3');
-      audio.play();
-    }, alarmTime.getTime() - Date.now());
-  });
+    // Check if alarm time is in the future
+    if (alarmTime.getTime() > Date.now()) {
+      return setTimeout(() => {
+        const audio = new Audio('alarm-sound.mp3');
+        audio.play();
+      }, alarmTime.getTime() - Date.now());
+    } else {
+      return null; // Don't set the alarm if the time has already passed
+    }
+  }).filter(timeout => timeout !== null); // Remove any null alarms
 }
 
 document.getElementById('set-alarm-button').addEventListener('click', setAlarm);
