@@ -87,12 +87,28 @@ function scheduleAlarm(alarm) {
   if (delay > 0) {
     console.log(`Alarm set for ${alarm.time}, triggering in ${delay}ms`);
     setTimeout(() => {
-      alarmSound.play();
-      alert(`Alarm: ${alarm.label}`);
+      playAlarm(alarm.label);
     }, delay);
   } else {
     console.warn(`Invalid alarm time: ${alarm.time} is in the past`);
   }
+}
+
+// Play alarm sound and show notification
+function playAlarm(label) {
+  alarmSound.play();
+  const notification = document.createElement("p");
+  notification.textContent = `Alarm: ${label}`;
+  notification.style.color = "red";
+  notification.style.fontWeight = "bold";
+  notification.style.textAlign = "center";
+
+  const alarmSection = document.getElementById("alarm-section");
+  alarmSection.appendChild(notification);
+
+  setTimeout(() => {
+    alarmSection.removeChild(notification);
+  }, 5000); // Remove the notification after 5 seconds
 }
 
 // Show success message
