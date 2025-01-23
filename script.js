@@ -36,3 +36,66 @@ setInterval(updateTime, 1000);
 
 // Get weather data on page load
 getWeather();
+
+const alarmForm = document.getElementById("alarm-form");
+const alarmList = document.getElementById("active-alarms");
+const successMessage = document.getElementById("alarm-success-message");
+const alarmSound = document.getElementById("alarm-sound");
+const alarms = [];
+
+// Handle alarm submission
+alarmForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const time = document.getElementById("alarm-time").value;
+  const label = document.getElementById("alarm-label").value;
+
+  if (time && label) {
+    const alarm = { time, label, id: Date.now() };
+    alarms.push(alarm);
+    displayAlarms();
+    scheduleAlarm(alarm);
+    showSuccessMessage();
+  }
+});
+
+// Display alarms
+function displayAlarms() {
+  alarmList.innerHTML = "";
+  alarms.forEach((alarm, index) => {
+    const li = document.createElement("li");
+    li.textContent = `${alarm.time} - ${alarm.label}`;
+
+    const offButton = document.createElement("button");
+    offButton.textContent = "Turn Off";
+    offButton.onclick = () => {
+      alarms.splice(index, 1);
+      displayAlarms();
+    };
+
+    li.appendChild(offButton);
+    alarmList.appendChild(li);
+  });
+}
+
+// Schedule an alarm
+function scheduleAlarm(alarm) {
+  const now = new Date();
+  const alarmTime = new Date(`${now.toDateString()} ${alarm.time}`);
+  const delay = alarmTime - now;
+
+  if (delay > 0) {
+    setTimeout(() => {
+      alarmSound.play();
+      alert(`Alarm: ${alarm.label}`);
+    }, delay);
+  }
+}
+
+// Show success message
+function showSuccessMessage() {
+  successMessage.style.display = "block";
+  setTimeout(() => {
+    successMessage.style.display = "none";
+  }, 3000);
+}
