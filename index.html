@@ -3,21 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Room Hub</title>
+  <title>Room Control</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="weather">
-    <div id="simple-weather">Loading weather...</div>
-  </div>
-  <div id="current-time">Loading time...</div>
-  <div id="alarm-controls">
-    <button id="set-alarm">Set Alarm</button>
-    <button id="clear-alarms">Cancel All Alarms</button>
-    <div id="success-message"></div>
-    <ul id="upcoming-alarms"></ul>
-  </div>
-  <script src="script.js"></script>
+  <!-- Mode Toggle Button -->
   <button id="mode-toggle">Switch to Dark Mode</button>
+
+  <!-- Weather Information -->
+  <div id="weather">
+    <div id="current-weather">
+      <p>Loading weather...</p>
+    </div>
+    <div id="forecast">
+      <p>Loading forecast...</p>
+    </div>
+  </div>
+
+  <!-- Time Information -->
+  <div id="time">
+    <p>Loading time...</p>
+  </div>
+
+  <!-- Alarm Section -->
+  <div id="alarm-section">
+    <button id="set-alarm-button">Set Morning Alarm</button>
+    <div id="alarm-message"></div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
